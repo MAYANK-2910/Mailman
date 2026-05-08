@@ -45,3 +45,51 @@ export async function revokeToken(): Promise<void> {
     });
   });
 }
+
+export async function gmailFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const token = await getToken();
+  const response = await fetch(`${GMAIL_API_BASE}${endpoint}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+
+  if (response.status === 401) {
+    await revokeToken();
+    const newToken = await authenticate(true);
+    const retryResponse = await fetch(`${GMAIL_API_BASE}${endpoint}`, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${newToken}`,
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+    });
+    if (!retryResponse.ok) {
+      throw new Error(`Gmail API error: ${retryResponse.status} ${retryResponse.statusText}`);
+    }
+    return retryResponse.json();
+  }
+
+  if (!response.ok) {
+    throw new Error(`Gmail API error: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+export function getAuthState(): AuthState {
+  return { ...authState };
+}
+
+export async function checkAuthStatus(): Promise<boolean> {
+  try {
+    await authenticate(false);
+    return true;
+  } catch {
+    return false;
+  }
+}
