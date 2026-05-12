@@ -1,8 +1,7 @@
 {
   "name": "mailman",
   "description": "Transform your Gmail into a calm, organized, stack-based email workspace.",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
