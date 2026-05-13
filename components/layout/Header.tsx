@@ -6,7 +6,7 @@ import { Badge } from '../ui/Badge';
 import { useFocusMode } from '../../hooks/useFocusMode';
 
 export function Header() {
-  const { totalUnread, isSearchOpen, toggleSearch } = useEmailStore();
+  const { totalUnread, isSearchOpen, toggleSearch, setMinimized } = useEmailStore();
   const { theme, toggleTheme } = useTheme();
   const { focusMode, toggleFocusMode, focusStats } = useFocusMode();
 
@@ -65,6 +65,17 @@ export function Header() {
           title="Toggle theme (T)"
         >
           {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+
+        <div className="w-px h-4 bg-border mx-1" />
+
+        <button
+          onClick={() => setMinimized(true)}
+          className="p-1.5 rounded-lg text-sm transition-all duration-200 hover:bg-danger/10 hover:text-danger text-text-secondary"
+          aria-label="Minimize"
+          title="Minimize Mailman"
+        >
+          ✕
         </button>
       </div>
     </header>
