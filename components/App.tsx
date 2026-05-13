@@ -24,7 +24,10 @@ export function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   useKeyboardShortcuts();
-  useKeyboardShortcuts();
+
+  useEffect(() => {
+    keyboardEngine.init();
+  }, []);
 
 
 
@@ -63,6 +66,7 @@ export function App() {
 
   return (
     <div className="w-full h-full bg-bg-primary text-text-primary flex flex-col rounded-t-2xl overflow-hidden relative z-10">
+        <CommandPalette />
         <Header />
         <NavTabs />
 
